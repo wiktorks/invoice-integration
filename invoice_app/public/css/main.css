@@ -1,0 +1,89 @@
+body {
+  background-color: #f9f9f9;
+}
+
+.date-picker {
+  margin: 30px 0;
+}
+
+.navbar {
+  background-color: #546b7c;
+  color: #fff;
+}
+.navbar a.navbar-brand,
+.navbar p {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.navbar p {
+  margin: 0 15px;
+}
+
+.table-row {
+  margin: 100px 0;
+}
+
+.table > :not(:last-child) > :last-child > * {
+  border-bottom-color: inherit;
+}
+
+td.hidden-row {
+  padding: 0;
+  border: 0;
+}
+
+.table td.not-hover {
+  box-shadow: none;
+}
+
+td.collapse-toggle {
+  cursor: pointer;
+}
+
+.hidden-row div {
+  padding: 20px 20px 20px 0;
+}
+
+.hidden-row table {
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+}
+
+#invoice-button-panel {
+  width: inherit;
+  max-width: inherit;
+  bottom: 30px;
+}
+
+#invoice-button-panel button {
+  height: 60px;
+}
+
+input[type="date"] {
+  background: #fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50%
+    no-repeat;
+}
+
+input[type="date"] {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 190px;
+}
+
+#date-range-container {
+  transition: width 0.5s ease;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: middle;
+  line-height: 30px;
+  height: 30px;
+  width: 0px;
+}
+#date-range-container.in {
+  width: 450px;
+}

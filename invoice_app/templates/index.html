@@ -1,0 +1,134 @@
+{% extends 'layout.html' %} {% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='/css/main.css') }}"
+/>
+<div class="table-row row justify-content-center">
+  <div class="col-sm-12">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>
+            <input
+              class="checkbox invoice-main-checkbox"
+              type="checkbox"
+              value=""
+            />
+          </th>
+          <th></th>
+          <th>Company name</th>
+          <th>Billable hours</th>
+          <th>Non billable hours</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody class="">
+        {% for company_name, company_data in invoice_data.items() %}
+        <tr>
+          <td>
+            <input
+              class="checkbox invoice-checkbox"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+          </td>
+          <td
+            class="collapse-toggle"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseExample{{ loop.index }}"
+          >
+            <div>
+              <i class="bi bi-caret-down-fill"></i>
+            </div>
+          </td>
+          <td
+            class="collapse-toggle"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseExample{{ loop.index }}"
+          >
+            {{company_name}}
+          </td>
+          <td
+            class="collapse-toggle"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseExample{{ loop.index }}"
+          >
+            {{company_data.billable}}
+          </td>
+          <td
+            class="collapse-toggle"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseExample{{ loop.index }}"
+          >
+            {{company_data.non_billable}}
+          </td>
+          <td>
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+              >
+                Invoice action
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="#"
+                    >Prześlij fakturę na maila PMa</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"
+                    >Prześlij fakturę do klienta</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"
+                    >Wystaw fakturę za ten okres</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+        <tr class="not-hover">
+          <td colspan="2" class="hidden-row not-hover"></td>
+          <td colspan="4" class="hidden-row not-hover">
+            <div class="collapse" id="collapseExample{{ loop.index }}">
+              <table class="table table-hover table-secondary align-middle">
+                <thead class="">
+                  <th>Task name</th>
+                  <th>Billable hours</th>
+                  <th>Non billable hours</th>
+                </thead>
+                <tbody>
+                  {% for task_name, task_hours in company_data.tasks.items() %}
+                  <tr>
+                    <td>{{task_name}}</td>
+                    <td>{{task_hours.billable}}</td>
+                    <td>{{task_hours.non_billable}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div
+  class="row justify-content-center position-fixed d-none"
+  id="invoice-button-panel"
+>
+  <div class="col-md-8 btn-group">
+    <button class="btn btn-primary">Prześlij faktury na maila PMa</button
+    ><button class="btn btn-warning">Prześlij faktury do klienta</button
+    ><button class="btn btn-success">Wystaw faktury za ten okres</button>
+  </div>
+</div>
+{% endblock content %}
