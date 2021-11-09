@@ -1,1 +1,1 @@
-# invoice-integration
+# Invoice integration project
