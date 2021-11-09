@@ -5,6 +5,7 @@ import os
 
 def create_app():
     app = Flask(__name__, static_url_path="/public", static_folder='public')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
     @app.route("/", methods=["GET"])
     def index():

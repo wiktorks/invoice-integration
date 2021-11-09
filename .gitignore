@@ -51,6 +51,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+sandbox/
 
 # Translations
 *.mo
@@ -128,3 +129,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vscode stuff
+*.code-workspace
+.vscode/
