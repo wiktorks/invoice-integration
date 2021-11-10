@@ -10,11 +10,18 @@ from flask_jwt_extended.utils import set_access_cookies
 
 from .utils.excel_reader import ExcelReader
 from .forms.login_form import LoginForm
-import os
+import os, datetime
 
 
 def create_app():
     app = Flask(__name__, static_url_path="/public", static_folder="public")
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
+    app.config["JWT_COOKIE_SECURE"] = True
+    app.config["SESSION_COOKIE_SECURE"] = True
+    app.config["JWT_TOKEN_LOCATION"] = ['cookies']
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(days=1)
+    
     jwt = JWTManager(app)
 
     @jwt.unauthorized_loader

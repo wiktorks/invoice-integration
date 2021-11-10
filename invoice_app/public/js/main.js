@@ -1,6 +1,3 @@
-// import bulmaCalendar from '~bulma-calendar/dist/js/bulma-calendar.min.js';
-// import Litepicker from "litepicker.js";
-
 const toggleAllCheckboxes = (e) => {
   const mainCheckbox = e.target;
 
@@ -24,11 +21,6 @@ const toggleInvoiceButtonDisplay = () => {
   invoiceButtonPanel.classList.add("d-none");
 };
 
-const toggleDateRange = () => {
-  const dateRangeContainer = document.getElementById("date-range-container");
-  dateRangeContainer.classList.toggle("in");
-};
-
 let mainCheckbox = document
   .getElementsByClassName("invoice-main-checkbox")
   .item(0);
@@ -40,10 +32,9 @@ mainCheckbox.addEventListener("change", toggleInvoiceButtonDisplay);
 for (element of checkboxList) {
   element.addEventListener("change", toggleInvoiceButtonDisplay);
 }
-// toggleDateRangeButton.addEventListener("click", toggleDateRange);
-// toggleInvoiceButtonDisplay();
 
-console.log(document.getElementById("litepicker"));
+toggleInvoiceButtonDisplay();
+
 const picker = new Litepicker({
   element: document.getElementById("litepicker"),
   singleMode: false,
@@ -53,7 +44,3 @@ const picker = new Litepicker({
 });
 picker.show();
 
-// const calendars = bulmaCalendar.attach('[type="date"]', {
-//   type: 'date',
-//   isRange: true
-// });
