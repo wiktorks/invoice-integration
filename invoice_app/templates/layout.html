@@ -27,35 +27,15 @@
       <div class="container">
         <a class="navbar-brand" href="#">Invoice Data</a>
         <div>
-          <div id="date-range-container" class="">
-            <input
-              type="date"
-              name="invoice-date-from"
-              id="invoice-date-from"
-            />
-            <p class="d-inline-block">to</p>
-            <input
-              type="date"
-              name="invoice-date-from"
-              id="invoice-date-from"
-            />
-          </div>
-          <button
-            type="button"
-            class="btn btn-primary btn-md"
-            data-toggle="toggle"
-            data-target="#demo"
-            id="date-range-button"
-          >
-            <i class="bi bi-calendar-range"></i> Select date range
-          </button>
+          {% if current_user %}
           <a class="navbar-brand" href="/logout">Logout</a>
+          {% endif %}
         </div>
       </div>
     </nav>
-    {% block navigation %} {% endblock navigation %}
+    {# {% block navigation %} {% endblock navigation %} #}
     <main class="container">
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      {# {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %} {% for category, message in messages %}
       <div
         class="alert alert-{{category}} alert-dismissible fade show"
@@ -69,14 +49,15 @@
           aria-label="Close"
         ></button>
       </div>
-      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock
-      content %}
+      {% endfor %} {% endif %} {% endwith %} #} {% block content %}{% endblock content %}
     </main>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
   </body>
 </html>

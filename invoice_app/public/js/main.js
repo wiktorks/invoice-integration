@@ -1,4 +1,5 @@
 // import bulmaCalendar from '~bulma-calendar/dist/js/bulma-calendar.min.js';
+// import Litepicker from "litepicker.js";
 
 const toggleAllCheckboxes = (e) => {
   const mainCheckbox = e.target;
@@ -39,8 +40,18 @@ mainCheckbox.addEventListener("change", toggleInvoiceButtonDisplay);
 for (element of checkboxList) {
   element.addEventListener("change", toggleInvoiceButtonDisplay);
 }
-toggleDateRangeButton.addEventListener("click", toggleDateRange);
-toggleInvoiceButtonDisplay();
+// toggleDateRangeButton.addEventListener("click", toggleDateRange);
+// toggleInvoiceButtonDisplay();
+
+console.log(document.getElementById("litepicker"));
+const picker = new Litepicker({
+  element: document.getElementById("litepicker"),
+  singleMode: false,
+  numberOfMonths: 2,
+  numberOfColumns: 2,
+  inlineMode: true
+});
+picker.show();
 
 // const calendars = bulmaCalendar.attach('[type="date"]', {
 //   type: 'date',
