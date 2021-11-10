@@ -8,6 +8,7 @@ from flask_jwt_extended import (
     verify_jwt_in_request,
     get_jwt_identity,
 )
+import re
 
 from ..forms.login_form import LoginForm
 
@@ -18,11 +19,14 @@ auth = Blueprint("auth", __name__)
 def refresh_expiring_jwts(response):
     print(f"Response object after_request: {response.location}")
     try:
+        if not re.search("login=True", response.location):
+            raise Exception
+        
         verify_jwt_in_request()
         access_token = create_access_token(identity=get_jwt_identity())
         set_access_cookies(response, access_token)
         return response
-    except Exception:  # (RuntimeError, KeyError) #, ExpiredSignatureError, NoAuthorizationError):
+    except Exception:
         return response
 
 
