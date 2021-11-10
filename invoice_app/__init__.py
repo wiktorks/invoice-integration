@@ -6,7 +6,8 @@ from flask_jwt_extended import (
     unset_jwt_cookies,
     current_user,
 )
-from flask_jwt_extended.utils import set_access_cookies
+from flask_jwt_extended.utils import get_jwt_identity, set_access_cookies
+from flask_jwt_extended.view_decorators import verify_jwt_in_request
 
 from .utils.excel_reader import ExcelReader
 from .forms.login_form import LoginForm
@@ -37,16 +38,16 @@ def create_app():
         identity = jwt_data["sub"]
         return {"name": identity}
 
-    # @app.after_request
-    # def refresh_expiring_jwts(response):
-    #     try:
-    #         print()
-    #         verify_jwt_in_request()
-    #         access_token = create_access_token(identity=get_jwt_identity())
-    #         set_access_cookies(response, access_token)
-    #         return response
-    #     except (RuntimeError, KeyError, ExpiredSignatureError, NoAuthorizationError):
-    #         return response
+    @app.after_request
+    def refresh_expiring_jwts(response):
+        print(f'Response object after_request: {response.location}')
+        try:
+            verify_jwt_in_request()
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+            return response
+        except Exception: #(RuntimeError, KeyError) #, ExpiredSignatureError, NoAuthorizationError):
+            return response
 
     @app.route("/", methods=["GET"])
     @jwt_required(optional=True)
@@ -87,7 +88,7 @@ def create_app():
 
     @app.route("/logout")
     def logout():
-        response = redirect(url_for("login"))
+        response = redirect(url_for("login", logout=True))
         unset_jwt_cookies(response)
         return response
 
