@@ -16,7 +16,7 @@
       </div>
       {% endfor %} {% endif %} {% endwith %}
   <div class="col-lg-6 content-section">
-    <form action="{{ url_for('login') }}" method="post">
+    <form action="{{ url_for('auth.login') }}" method="post">
       {{form.hidden_tag()}}
       <fieldset class="">
         <legend class="border-bottom mb-4">Log in</legend>

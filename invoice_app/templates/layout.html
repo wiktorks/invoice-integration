@@ -28,7 +28,7 @@
         <a class="navbar-brand" href="#">Invoice Data</a>
         <div>
           {% if current_user %}
-          <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
+          <a class="navbar-brand" href="{{ url_for('auth.logout') }}">Logout</a>
           {% endif %}
         </div>
       </div>
