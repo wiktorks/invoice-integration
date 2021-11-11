@@ -17,7 +17,6 @@ auth = Blueprint("auth", __name__)
 
 @auth.after_request
 def refresh_expiring_jwts(response):
-    print(f"Response object after_request: {response.location}")
     try:
         if not re.search("login=True", response.location):
             raise Exception

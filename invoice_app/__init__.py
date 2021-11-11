@@ -4,8 +4,7 @@ from flask_jwt_extended import (
 )
 from invoice_app.routes.main import main
 from invoice_app.routes.auth import auth
-from invoice_app.config import Config
-import os, datetime
+from invoice_app.config import DevConfig
 
 jwt = JWTManager()
 
@@ -26,10 +25,9 @@ def user_lookup_callback(_jwt_header, jwt_data):
     return {"name": identity}
 
 
-def create_app(config_class=Config):
+def create_app(config_class=DevConfig):
     app = Flask(__name__, static_url_path="/public", static_folder="public")
     app.config.from_object(config_class)
-
     jwt.init_app(app)
 
     app.register_blueprint(main)

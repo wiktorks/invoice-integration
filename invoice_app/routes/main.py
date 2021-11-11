@@ -18,7 +18,11 @@ def index():
         er = ExcelReader(excel_path)
         invoice_data = er.get_total_hours_by_project()
         return render_template(
-            "index.html", invoice_data=invoice_data, current_user=current_user
+            "index.html",
+            invoice_data=invoice_data,
+            current_user=current_user,
+            session="True" if current_app.config["SESSION_COOKIE_SECURE"] else "False",
+            jwt="True" if current_app.config["JWT_COOKIE_SECURE"] else "False",
         )
     else:
         flash("You must log in to use this app.", "info")

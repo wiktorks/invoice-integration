@@ -1,9 +1,8 @@
 from invoice_app import create_app
 
-app = create_app()
+from invoice_app.config import ProdConfig, DevConfig
+
+app = create_app(config_class=ProdConfig)
 
 if __name__ == '__main__':
-    from dotenv import load_dotenv
-    load_dotenv()
-    
     app.run(debug=True)
