@@ -1,4 +1,3 @@
-from pprint import pprint
 from openpyxl import load_workbook
 import datetime as dt
 
@@ -43,7 +42,7 @@ class ExcelReader:
 
         return total_hours
 
-    #TODO zoptymalizować algorytm do złożoności O(n)
+    # TODO zoptymalizować algorytm do złożoności O(n)
     #! Użyj pandasa zamiast tego niżej (dask -> do optymalizacji Pandas)
     def get_total_hours_by_project(self):
         total_hours_per_company = {}
@@ -85,18 +84,8 @@ class ExcelReader:
         return total_hours
 
     def __enter__(self, value):
-        
+
         return self
 
     def __exit__(self):
         pass
-
-if __name__ == '__main__':
-    er = ExcelReader('/home/wiktorks/Documents/Moje/Localhost/praca/billable/invoice_generator/invoice_app/daily_report_28_10_2021_v2.xlsx')
-    import json
-    from pprint import pprint as pp
-    # print(json.dumps(er.get_total_hours_by_project()))
-    pp(er.get_total_hours_by_project())
-    with ExcelReader('/home/wiktorks/Documents/Moje/Localhost/praca/billable/invoice_generator/invoice_app/daily_report_28_10_2021_v2.xlsx') as _er:
-        pass
-        

@@ -1,16 +1,16 @@
-{% extends 'layout.html' %} {% block content %} {% with messages =
-get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
-message in messages %}
+{% extends 'layout.html' %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
 <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
   {{message}}
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  ></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-{% endfor %} {% endif %} {% endwith %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+
 <div class="row justify-content-center">
   <div class="row">
     <div class="col-md-12">
@@ -27,11 +27,7 @@ message in messages %}
       <thead class="table-dark">
         <tr>
           <th>
-            <input
-              class="checkbox invoice-main-checkbox"
-              type="checkbox"
-              value=""
-            />
+            <input class="checkbox invoice-main-checkbox" type="checkbox" value="" />
           </th>
           <th></th>
           <th>Company name</th>
@@ -44,68 +40,37 @@ message in messages %}
         {% for company_name, company_data in invoice_data.items() %}
         <tr>
           <td>
-            <input
-              class="checkbox invoice-checkbox"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
+            <input class="checkbox invoice-checkbox" type="checkbox" value="" id="flexCheckDefault" />
           </td>
-          <td
-            class="collapse-toggle"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample{{ loop.index }}"
-          >
+          <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
             <div>
               <i class="bi bi-caret-down-fill"></i>
             </div>
           </td>
-          <td
-            class="collapse-toggle"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample{{ loop.index }}"
-          >
+          <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
             {{company_name}}
           </td>
-          <td
-            class="collapse-toggle"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample{{ loop.index }}"
-          >
+          <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
             {{company_data.billable}}
           </td>
-          <td
-            class="collapse-toggle"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample{{ loop.index }}"
-          >
+          <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
             {{company_data.non_billable}}
           </td>
           <td>
             <div class="dropdown">
-              <button
-                class="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-              >
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown">
                 Invoice action
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li>
-                  <a class="dropdown-item" href="#"
-                    >Prześlij fakturę na maila PMa</a
-                  >
+                  <a class="dropdown-item" href="#">Prześlij fakturę na maila PMa</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#"
-                    >Prześlij fakturę do klienta</a
-                  >
+                  <a class="dropdown-item" href="#">Prześlij fakturę do klienta</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#"
-                    >Wystaw fakturę za ten okres</a
-                  >
+                  <a class="dropdown-item" href="#">Wystaw fakturę za ten okres</a>
                 </li>
               </ul>
             </div>
@@ -139,14 +104,10 @@ message in messages %}
     </table>
   </div>
 </div>
-<div
-  class="row justify-content-center position-fixed d-none"
-  id="invoice-button-panel"
->
+<div class="row justify-content-center position-fixed d-none" id="invoice-button-panel">
   <div class="col-md-8 btn-group">
-    <button class="btn btn-primary">Prześlij faktury na maila PMa</button
-    ><button class="btn btn-warning">Prześlij faktury do klienta</button
-    ><button class="btn btn-success">Wystaw faktury za ten okres</button>
+    <button class="btn btn-primary">Prześlij faktury na maila PMa</button><button class="btn btn-warning">Prześlij
+      faktury do klienta</button><button class="btn btn-success">Wystaw faktury za ten okres</button>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
