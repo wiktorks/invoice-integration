@@ -24,6 +24,7 @@ package:
     - node_modules/**
     - venv/**
     - .env
+    - sandbox/**
 
 functions:
   app:
