@@ -49,11 +49,11 @@ class ClickupReader:
 
     def get_billed_tasks(self, start_date=None, end_date=None):
         if not end_date:
-            end_date = datetime.now().timestamp()
+            end_date = datetime.now().timestamp() * 1000
         if not start_date:
-            start_date = (datetime.today() - relativedelta(months=1)).timestamp()
+            start_date = (datetime.today() - relativedelta(months=1)).timestamp() * 1000
             
-        url = f"https://api.clickup.com/api/v2/team/2443740/time_entries?start_date={int(start_date)}000&end_date={int(end_date)}000&assignee={','.join([str(assignee) for assignee in self.assignees])}"
+        url = f"https://api.clickup.com/api/v2/team/2443740/time_entries?start_date={int(start_date)}&end_date={int(end_date)}&assignee={','.join([str(assignee) for assignee in self.assignees])}"
         request = Request(
             url=url,
             headers=self.header,
@@ -64,7 +64,7 @@ class ClickupReader:
         response = list(
             filter(
                 lambda task: str(task["task_location"]["subcategory_id"]) in self.backlog_lists
-                if isinstance(task["task"], dict)
+                if isinstance(task, dict) and "task" in task.keys() and isinstance(task["task"], dict)
                 else False,
                 response["data"],
             )
