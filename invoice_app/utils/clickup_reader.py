@@ -37,7 +37,7 @@ class ClickupReader:
             for task_list in folder["lists"]:
                 if re.search("[bB]acklog", task_list["name"]):
                     self.backlog_lists.append(task_list["id"])
-        
+
         url = f"https://api.clickup.com/api/v2/team"
         request = Request(
             url=url,
@@ -45,14 +45,18 @@ class ClickupReader:
         )
         response = urlopen(request).read()
         response = json.loads(response)
-        self.assignees = [member["user"]["id"] for member in response["teams"][0]["members"]]
+        self.assignees = [
+            member["user"]["id"] for member in response["teams"][0]["members"]
+        ]
 
     def get_billed_tasks(self, start_date=None, end_date=None):
         if not end_date:
+            # ms
             end_date = datetime.now().timestamp() * 1000
         if not start_date:
+            # ms
             start_date = (datetime.today() - relativedelta(months=1)).timestamp() * 1000
-            
+
         url = f"https://api.clickup.com/api/v2/team/2443740/time_entries?start_date={int(start_date)}&end_date={int(end_date)}&assignee={','.join([str(assignee) for assignee in self.assignees])}"
         request = Request(
             url=url,
@@ -63,37 +67,52 @@ class ClickupReader:
         response = json.loads(response)
         response = list(
             filter(
-                lambda task: str(task["task_location"]["subcategory_id"]) in self.backlog_lists
-                if isinstance(task, dict) and "task" in task.keys() and isinstance(task["task"], dict)
+                lambda task: str(task["task_location"]["subcategory_id"])
+                in self.backlog_lists
+                if isinstance(task, dict)
+                and "task" in task.keys()
+                and isinstance(task["task"], dict)
                 else False,
                 response["data"],
             )
         )
         response = [
-        {
-            "task": {"id": timer["task"]["id"], "name": timer["task"]["name"]},
-            "user": {"id": timer["user"]["id"], "name": timer["user"]["username"]},
-            "billable": timer["billable"],
-            "start": timer["start"],
-            "end": timer["end"],
-            "duration": timer["duration"],
-            "folder": timer["task_location"]["category_id"],
-        }
-        for timer in response
+            {
+                "task": {"id": timer["task"]["id"], "name": timer["task"]["name"]},
+                "user": {"id": timer["user"]["id"], "name": timer["user"]["username"]},
+                "billable": timer["billable"],
+                "start": int(timer["start"][:-3]),  # ms
+                "end": int(timer["end"][:-3]),  # ms
+                "duration": int(timer["duration"][:-3])
+                if len(timer["duration"]) > 3
+                else 1,  # ms
+                "folder": timer["task_location"]["category_id"],
+            }
+            for timer in response
         ]
         response = sorted(
-            response, key=lambda timer: (timer["task"]["id"], timer["user"]["id"], timer["billable"])
+            response,
+            key=lambda timer: (
+                timer["task"]["id"],
+                timer["user"]["id"],
+                timer["billable"],
+            ),
         )
 
         def timer_reduce(timer1, timer2):
             new_timer = timer1
-            new_timer["duration"] = str(int(new_timer["duration"]) + int(timer2["duration"]))
+            new_timer["duration"] = new_timer["duration"] + timer2["duration"]
             return new_timer
 
         response = [
             reduce(timer_reduce, list(group))
             for _, group in groupby(
-                response, key=lambda timer: (timer["task"]["id"], timer["user"]["id"], timer["billable"])
+                response,
+                key=lambda timer: (
+                    timer["task"]["id"],
+                    timer["user"]["id"],
+                    timer["billable"],
+                ),
             )
         ]
         for _, group in groupby(response, key=lambda timer: str(timer["folder"])):
@@ -102,9 +121,11 @@ class ClickupReader:
             for task in group_tasks:
                 folder_id = task["folder"]
                 if task["billable"]:
-                    self.folder_dict[folder_id]["billable"] += int(task["duration"] )
+                    # ms
+                    self.folder_dict[folder_id]["billable"] += task["duration"]
                 else:
-                    self.folder_dict[folder_id]["non_billable"] += int(task["duration"] )
+                    # ms
+                    self.folder_dict[folder_id]["non_billable"] += task["duration"]
             self.folder_dict[group_tasks[0]["folder"]]["tasks"] += group_tasks
 
         return self.folder_dict

@@ -1,5 +1,6 @@
 import os, datetime
 
+
 class DevConfig:
     def __init__(self) -> None:
         self.SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -8,8 +9,8 @@ class DevConfig:
         self.SESSION_COOKIE_SECURE = False
         self.JWT_TOKEN_LOCATION = ["cookies"]
         self.JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(hours=1)
-        
-        self.MAIL_SERVER="smtp.googlemail.com"
+
+        self.MAIL_SERVER = "smtp.googlemail.com"
         self.MAIL_PORT = 587
         self.MAIL_USE_TLS = True
         self.MAIL_USE_SSL = False
@@ -25,8 +26,8 @@ class ProdConfig:
     SESSION_COOKIE_SECURE = True
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(hours=1)
-    
-    MAIL_SERVER="smtp.googlemail.com"
+
+    MAIL_SERVER = "smtp.googlemail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
