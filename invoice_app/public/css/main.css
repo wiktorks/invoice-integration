@@ -98,3 +98,12 @@ input[type="date"] {
 #date-range-container.in {
   width: 450px;
 }
+
+#litepicker {
+  padding: 0;
+}
+
+#filter-by-date {
+  width: auto;
+  margin-top: 30px;
+}
