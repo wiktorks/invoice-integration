@@ -37,7 +37,8 @@
         </tr>
       </thead>
       <tbody class="">
-        {% for company_name, company_data in invoice_data.items() %}
+        {% for company in invoice_data.values() %}
+        {% if company.tasks %}
         <tr>
           <td>
             <input class="checkbox invoice-checkbox" type="checkbox" value="" id="flexCheckDefault" />
@@ -48,13 +49,13 @@
             </div>
           </td>
           <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
-            {{company_name}}
+            {{company.name}}
           </td>
           <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
-            {{company_data.billable}}
+            {{company.billable|strftime}}
           </td>
           <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
-            {{company_data.non_billable}}
+            {{company.non_billable|strftime}}
           </td>
           <td>
             <div class="dropdown">
@@ -83,15 +84,22 @@
               <table class="table table-hover table-secondary align-middle">
                 <thead class="">
                   <th>Task name</th>
+                  <th>Owner</th>
                   <th>Billable hours</th>
                   <th>Non billable hours</th>
                 </thead>
                 <tbody>
-                  {% for task_name, task_hours in company_data.tasks.items() %}
+                  {% for task in company.tasks %}
                   <tr>
-                    <td>{{task_name}}</td>
-                    <td>{{task_hours.billable}}</td>
-                    <td>{{task_hours.non_billable}}</td>
+                    <td>{{task.task.name}}</td>
+                    <td>{{task.user.name}}</td>
+                    {% if task.billable %}
+                    <td>{{task.duration|strftime}}</td>
+                    <td>0</td>
+                    {% else %}
+                    <td>0</td>
+                    <td>{{task.duration|strftime}}</td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -99,6 +107,7 @@
             </div>
           </td>
         </tr>
+        {% endif %}
         {% endfor %}
       </tbody>
     </table>
