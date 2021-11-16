@@ -36,15 +36,19 @@ for (element of checkboxList) {
 toggleInvoiceButtonDisplay();
 
 const urlParams = new URLSearchParams(window.location.search);
-const startDateQuery = urlParams.get('start_date')
-const endDateQuery = urlParams.get('end_date')
-let endDate = endDateQuery ? endDateQuery: null
+const startDateQuery = urlParams.get("start_date");
+const endDateQuery = urlParams.get("end_date");
+let endDate = endDateQuery ? endDateQuery : null;
 let startDate;
 if (endDate) {
-  startDate  = startDateQuery ? startDateQuery: new Date(endDate.setMonth(endDate.getMonth()-1));
+  startDate = startDateQuery
+    ? startDateQuery
+    : new Date(endDate.setMonth(endDate.getMonth() - 1));
 } else {
-  const date_today = new Date()
-  startDate  = startDateQuery ? startDateQuery: new Date(date_today.setMonth(date_today.getMonth()-1));
+  const date_today = new Date();
+  startDate = startDateQuery
+    ? startDateQuery
+    : new Date(date_today.setMonth(date_today.getMonth() - 1));
 }
 const picker = new Litepicker({
   element: document.getElementById("litepicker"),
@@ -53,17 +57,18 @@ const picker = new Litepicker({
   numberOfColumns: 2,
   inlineMode: true,
   startDate: startDate,
-  endDate: endDate ? endDate: new Date()
+  endDate: endDate ? endDate : new Date(),
 });
 picker.show();
 
 const filterByDate = () => {
-  start = picker.getStartDate()
-  end = picker.getEndDate()
+  start = picker.getStartDate();
+  end = picker.getEndDate();
 
-  window.location.href = window.location.origin + `/dev?start_date=${start.getTime()}&end_date=${end.getTime()}`
-}
+  window.location.href =
+    window.location.origin +
+    `/dev?start_date=${start.getTime()}&end_date=${end.getTime()}`;
+};
 
-calendarButton = document.getElementById('filter-by-date')
-calendarButton.addEventListener("click", filterByDate)
-
+calendarButton = document.getElementById("filter-by-date");
+calendarButton.addEventListener("click", filterByDate);
