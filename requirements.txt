@@ -29,9 +29,11 @@ pdfkit==0.6.1
 platformdirs==2.4.0
 pydantic==1.8.2
 PyJWT==2.3.0
+python-dateutil==2.8.2
 python-dotenv==0.19.1
 regex==2021.10.23
 rfc3986==1.5.0
+six==1.16.0
 sniffio==1.2.0
 tomli==1.2.2
 typing-extensions==3.10.0.2

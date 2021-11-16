@@ -61,7 +61,7 @@ const filterByDate = () => {
   start = picker.getStartDate()
   end = picker.getEndDate()
 
-  window.location.href = window.location.origin + `?start_date=${start.getTime()}&end_date=${end.getTime()}`
+  window.location.href = window.location.origin + `/dev?start_date=${start.getTime()}&end_date=${end.getTime()}`
 }
 
 calendarButton = document.getElementById('filter-by-date')
