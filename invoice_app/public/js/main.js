@@ -78,7 +78,7 @@ const sendInvoiceMail = (e) => {
   mail.billable = totalBillable;
   mail.non_billable = totalNonBillable;
   // ! PAMIĘTAJ O /dev
-  fetch(window.location.origin + "/dev/sendmail", {
+  fetch(window.location.origin + "/sendmail", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
