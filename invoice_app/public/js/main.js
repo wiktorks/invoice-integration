@@ -50,8 +50,8 @@ const sendInvoiceMail = (e) => {
   my_date = endDate ? endDate : new Date()
   let mail = {
     name: company.children[2].innerText,
-    date_start: startDate.getTime(),
-    date_end: my_date.getTime(),
+    date_start: startDate instanceof Date ? startDate.getTime() : startDate,
+    date_end: my_date instanceof Date ? my_date.getTime() : my_date,
   };
   taskElements = document.querySelectorAll(`.tasks-${companyId} tbody tr`);
   taskList = [];
@@ -137,7 +137,7 @@ const filterByDate = () => {
 
   window.location.href =
     window.location.origin +
-    `/dev?start_date=${start.getTime()}&end_date=${end.getTime()}`;
+    `/?start_date=${start.getTime()}&end_date=${end.getTime()}`;
 };
 
 calendarButton = document.getElementById("filter-by-date");

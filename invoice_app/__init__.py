@@ -18,7 +18,7 @@ def create_app(config_class=DevConfig):
     
     @app.template_filter("date_pretty")
     def timestamp_to_date(timestamp):
-        date = int(timestamp/1000)
+        date = int(float(timestamp)/1000)
         return str(datetime.fromtimestamp(date).date())
 
     app.register_blueprint(main)
