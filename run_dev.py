@@ -1,8 +1,8 @@
-from invoice_app import create_app
-from invoice_app.config import DevConfig
 from dotenv import load_dotenv
 
 load_dotenv()
+from invoice_app import create_app
+from invoice_app.config import DevConfig
 
 
 app = create_app(config_class=DevConfig())

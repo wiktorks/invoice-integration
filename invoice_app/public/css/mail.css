@@ -1,0 +1,27 @@
+:root {
+    --bo-red: #f0565f;
+    --bo-blue: #323e5b;
+}
+
+* {
+    font-family: "Montserrat", sans-serif;
+    color: var(--bo-blue)
+}
+
+img {
+    width: 200px;
+    height: auto;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0 20px;
+    padding: 0
+}
+
+header {
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 0 50px; */
+    margin-bottom: 50px;
+}

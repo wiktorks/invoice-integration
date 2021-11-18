@@ -137,3 +137,10 @@ dmypy.json
 # serverless stuff
 .serverless/
 serverless-wsgi*
+# Elastic Beanstalk Files
+.elasticbeanstalk/
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+secrets.yml
+*.zip

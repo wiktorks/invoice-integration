@@ -20,3 +20,7 @@ def custom_expired_response(header, payload):
 def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return {"name": identity}
+
+@jwt.invalid_token_loader
+def invalid_token_callback(_err):
+    return redirect(url_for("auth.logout"))
