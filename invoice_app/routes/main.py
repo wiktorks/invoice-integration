@@ -1,15 +1,9 @@
-from flask import (
-    Blueprint,
-    render_template,
-    redirect,
-    url_for,
-    flash,
-    request,
-)
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_jwt_extended import jwt_required, current_user
 from flask_mailing import Message
 from ..utils.clickup_reader import ClickupReader
 from ..extensions import mail
+import json, pdfkit
 
 
 main = Blueprint("main", __name__)
@@ -37,10 +31,17 @@ def index():
 
 @main.route("/sendmail", methods=["POST"])
 async def send_mail():
+    data = json.loads(request.data)
+    mail_template = render_template("mail-view.html", data=data)
+
+    pdf_report = pdfkit.from_string(mail_template, False)
+
     message = Message(
         subject="Flask-Mailing module",
         recipients=["wiktorks1994@gmail.com"],
-        body="This is the basic email body",
+        body="Pdf w załączniku",
+        subtype="html",
     )
+    message.attach("raport.pdf", pdf_report)
     await mail.send_message(message)
-    return redirect("main.index")
+    return jsonify({"message": "success"}), 200

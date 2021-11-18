@@ -26,9 +26,27 @@ package:
     - .env
     - sandbox/**
 
+layers:
+  wkhtmltoxLayer:
+    name: wkhtmltox
+    description: wkhtmltox binaries for pdf/image generation
+    package:
+      artifact: wkhtmltox-0.12.6-4.amazonlinux2_lambda.zip
+
 functions:
   app:
     handler: wsgi_handler.handler
     events:
       - http: ANY /
       - http: "ANY /{proxy+}"
+
+    layers:
+      - { Ref: WkhtmltoxLayerLambdaLayer }
+
+    environment:
+      FONTCONFIG_PATH: /opt/fonts
+      SECRET_KEY: ${file(./secrets.yml):SECRET_KEY}
+      JWT_SECRET_KEY: ${file(./secrets.yml):JWT_SECRET_KEY}
+      MAIL_USERNAME: ${file(./secrets.yml):MAIL_USERNAME}
+      MAIL_PASSWORD: ${file(./secrets.yml):MAIL_PASSWORD}
+      CLICKUP_ACCESS_TOKEN: ${file(./secrets.yml):CLICKUP_ACCESS_TOKEN}
