@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 load_dotenv()
 from invoice_app import create_app
+from invoice_app.config import ProdConfig, DevConfig
 import os
 
-from invoice_app.config import ProdConfig, DevConfig
 
 application = create_app(config_class=DevConfig)
 
