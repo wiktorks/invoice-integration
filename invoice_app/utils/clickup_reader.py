@@ -37,7 +37,6 @@ class ClickupReader:
             for task_list in folder["lists"]:
                 if re.search("[bB]acklog", task_list["name"]):
                     self.backlog_lists.append(task_list["id"])
-
         url = f"https://api.clickup.com/api/v2/team"
         request = Request(
             url=url,
@@ -58,20 +57,18 @@ class ClickupReader:
             start_date = (datetime.today() - relativedelta(months=1)).timestamp() * 1000
 
         url = f"https://api.clickup.com/api/v2/team/2443740/time_entries?start_date={int(start_date)}&end_date={int(end_date)}&assignee={','.join([str(assignee) for assignee in self.assignees])}"
+
         request = Request(
             url=url,
             headers=self.header,
         )
-
         response = urlopen(request).read()
         response = json.loads(response)
+
         response = list(
             filter(
-                lambda task: str(task["task_location"]["subcategory_id"])
-                in self.backlog_lists
-                if isinstance(task, dict)
-                and "task" in task.keys()
-                and isinstance(task["task"], dict)
+                lambda task: str(task["task_location"]["list_id"]) in self.backlog_lists
+                if "task" in task.keys() and isinstance(task["task"], dict)
                 else False,
                 response["data"],
             )
@@ -86,7 +83,7 @@ class ClickupReader:
                 "duration": int(timer["duration"][:-3])
                 if len(timer["duration"]) > 3
                 else 1,  # ms
-                "folder": timer["task_location"]["category_id"],
+                "folder": timer["task_location"]["folder_id"],
             }
             for timer in response
         ]
@@ -127,5 +124,4 @@ class ClickupReader:
                     # ms
                     self.folder_dict[folder_id]["non_billable"] += task["duration"]
             self.folder_dict[group_tasks[0]["folder"]]["tasks"] += group_tasks
-
         return self.folder_dict
