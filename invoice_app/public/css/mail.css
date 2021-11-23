@@ -1,25 +1,25 @@
-:root {
+#mail-body {
     --bo-red: #f0565f;
     --bo-blue: #323e5b;
 }
 
-* {
+#mail-body * {
     font-family: "Montserrat", sans-serif;
     color: var(--bo-blue)
 }
 
-img {
+#mail-body img {
     width: 200px;
     height: auto;
 }
 
-ul {
+#mail-body ul {
     list-style-type: none;
     margin: 0 20px;
     padding: 0
 }
 
-header {
+#mail-body header {
     justify-content: space-between;
     align-items: center;
     /* padding: 0 50px; */

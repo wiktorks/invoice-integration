@@ -7,26 +7,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
+  {% if view_only != True %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  {% endif %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for("static", filename="/css/mail.css", _external=True) }}">
+  <link rel="stylesheet" href="{{ url_for("static", filename="css/mail.css", _external=True) }}">
 </head>
 
-<body class="container">
+<body class="container" id="mail-body">
   <header class="row">
-    <img class="logo col-xs-3"
-      src="https://bulldogjob.pl/system/companies/logos/000/002/541/original/Logo-Blue-Owl-square.jpg" alt="" srcset="">
-    <div class="col-xs-9">
+    {% set bootstrap_col = 'col-sm-' %}
+    {% if view_only %}
+    {% set bootstrap_col = 'col-xs-' %}
+    {% endif %}
+    <img class="logo {{ bootstrap_col }}3" src="https://blueowl.pl/static/882db3adbda02abc0d3ddf37581c5b11/logo.png"
+      alt="" srcset="">
+    <div class="col-sm-9">
       <div class="row justify-content-end">
-        <ul class="col-xs-4 project-data">
+        <ul class="col-sm-4 project-data">
           <li>Project name</li>
           <li>Project manager name</li>
         </ul>
-        <ul class="col-xs-4 project-data">
+        <ul class="col-sm-4 project-data">
           <li>Company name</li>
           <li>Company NIP</li>
           <li>Company addres 1</li>
