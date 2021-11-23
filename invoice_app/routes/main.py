@@ -30,10 +30,14 @@ def index():
 
 
 @main.route("/sendmail", methods=["POST"])
+# @jwt_required()
 async def send_mail():
     data = json.loads(request.data)
     mail_template = render_template("mail-view.html", data=data)
 
+    if request.args.get('view'):
+        return render_template("mail-view.html", data=data, view_only=True)
+    
     pdf_report = pdfkit.from_string(mail_template, False)
 
     message = Message(
