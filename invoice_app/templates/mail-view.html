@@ -20,19 +20,19 @@
 
 <body class="container" id="mail-body">
   <header class="row">
-    {% set bootstrap_col = 'col-sm-' %}
-    {% if view_only %}
     {% set bootstrap_col = 'col-xs-' %}
+    {% if view_only %}
+    {% set bootstrap_col = 'col-sm-' %}
     {% endif %}
     <img class="logo {{ bootstrap_col }}3" src="https://blueowl.pl/static/882db3adbda02abc0d3ddf37581c5b11/logo.png"
       alt="" srcset="">
-    <div class="col-sm-9">
+    <div class="{{ bootstrap_col }}8">
       <div class="row justify-content-end">
-        <ul class="col-sm-4 project-data">
+        <ul class="{{ bootstrap_col }}4 project-data">
           <li>Project name</li>
           <li>Project manager name</li>
         </ul>
-        <ul class="col-sm-4 project-data">
+        <ul class="{{ bootstrap_col }}4 project-data">
           <li>Company name</li>
           <li>Company NIP</li>
           <li>Company addres 1</li>

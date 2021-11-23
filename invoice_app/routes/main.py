@@ -30,22 +30,20 @@ def index():
 
 
 @main.route("/sendmail", methods=["POST"])
-# @jwt_required()
 async def send_mail():
     data = json.loads(request.data)
     mail_template = render_template("mail-view.html", data=data)
 
     if request.args.get('view'):
         return render_template("mail-view.html", data=data, view_only=True)
-    
-    pdf_report = pdfkit.from_string(mail_template, False)
+    else:
+        pdf_report = pdfkit.from_string(mail_template, False)
 
-    message = Message(
-        subject="Flask-Mailing module",
-        recipients=["wiktorks1994@gmail.com"],
-        body="Pdf w załączniku",
-        subtype="html",
-    )
-    message.attach("raport.pdf", pdf_report)
-    await mail.send_message(message)
-    return jsonify({"message": "success"}), 200
+        message = Message(
+            subject="Flask-Mailing module",
+            recipients=["invoiceflask@gmail.com"],
+            body="Wygenerowany raport PDF w załączniku.",
+        )
+        message.attach("raport.pdf", pdf_report)
+        await mail.send_message(message)
+        return jsonify({"message": "success"}), 200
