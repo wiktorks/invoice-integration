@@ -1,220 +1,38 @@
-const urlParams = new URLSearchParams(window.location.search);
-const startDateQuery = urlParams.get("start_date");
-const endDateQuery = urlParams.get("end_date");
-let endDate = endDateQuery ? endDateQuery : null;
-let startDate;
-if (endDate) {
-  startDate = startDateQuery
-    ? startDateQuery
-    : new Date(endDate.setMonth(endDate.getMonth() - 1));
-} else {
-  const date_today = new Date();
-  startDate = startDateQuery
-    ? startDateQuery
-    : new Date(date_today.setMonth(date_today.getMonth() - 1));
-}
+import {
+  toggleAllCheckboxes,
+  toggleInvoiceButtonDisplay,
+} from "./modules/checkboxes.js";
+import { picker, filterByDate } from "./modules/calendar.js";
+import { viewMail, sendInvoiceMail } from "./modules/mailer.js";
 
-const toggleAllCheckboxes = (e) => {
-  const mainCheckbox = e.target;
-  className = mainCheckbox.classList.item(1);
-  if (className.split("-")[0] == "task") {
-    temp = mainCheckbox.classList.item(2).split("-");
-    temp.splice(1, 1);
-    className = temp.join("-");
-  }
-  let checkboxList = document.getElementsByClassName(className);
-  for (checkbox of checkboxList) {
-    checkbox.checked = mainCheckbox.checked;
-  }
-};
-
-const toggleInvoiceButtonDisplay = () => {
-  //TODO Zoptymalizować tworzenie listy checkboxów
-  const checkboxList = document.getElementsByClassName("invoice-checkbox");
-  let invoiceButtonPanel = document.getElementById("invoice-button-panel");
-
-  for (checkbox of checkboxList) {
-    if (checkbox.checked) {
-      invoiceButtonPanel.classList.remove("d-none");
-      return;
-    }
-  }
-  invoiceButtonPanel.classList.add("d-none");
-};
-
-// TODO Zmieniaj dynamicznie godziny po zmianie checkboxa!
-const sendInvoiceMail = (e) => {
-  const el = e.target;
-  const companyId = el.id.split("-").at(-1)
-  const company = document.getElementById(`company-${companyId}`);
-  my_date = endDate ? endDate : new Date();
-  let mail = {
-    name: company.children[2].innerText,
-    date_start: startDate instanceof Date ? startDate.getTime() : startDate,
-    date_end: my_date instanceof Date ? my_date.getTime() : my_date,
-  };
-  taskElements = document.querySelectorAll(`.tasks-${companyId} tbody tr`);
-  taskList = [];
-  totalBillable = 0;
-  totalNonBillable = 0;
-  for (element of taskElements) {
-    const checkbox = element.children[0].firstChild;
-    if (checkbox.checked) {
-      totalBillable += parseInt(
-        element.children[3].attributes["data-time"].value
-      );
-      totalNonBillable += parseInt(
-        element.children[4].attributes["data-time"].value
-      );
-      taskList.push({
-        name: element.children[1].innerText,
-        assignee: element.children[2].innerText,
-        billable: element.children[3].attributes["data-time"].value,
-        non_billable: element.children[4].attributes["data-time"].value,
-      });
-    }
-  }
-  mail.tasks = taskList;
-  mail.billable = totalBillable;
-  mail.non_billable = totalNonBillable;
-  // ! PAMIĘTAJ O /dev
-  fetch(window.location.origin + "/sendmail", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "same-origin",
-    body: JSON.stringify(mail),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((text) => {
-          throw new Error(text);
-        });
-      } else {
-        return res.json();
-      }
-    })
-    .then((data) => {
-      if (data.message === "success") {
-        alert("Pomyślnie wysłano wiadomość!");
-      }
-    })
-    .catch((e) => {
-      alert("Nie udało sie wysłać maila");
-      console.log(e);
-    });
-};
-
-const viewMail = (e) => {
-  const el = e.target;
-  const companyId = el.classList.item(2).split("-").at(-1);
-  const company = document.getElementById(`company-${companyId}`);
-  const mailModal = new bootstrap.Modal(
-    document.getElementById("mail-display")
-  );
-  my_date = endDate ? endDate : new Date();
-  let mail = {
-    name: company.children[2].innerText,
-    date_start: startDate instanceof Date ? startDate.getTime() : startDate,
-    date_end: my_date instanceof Date ? my_date.getTime() : my_date,
-  };
-  taskElements = document.querySelectorAll(`.tasks-${companyId} tbody tr`);
-  taskList = [];
-  totalBillable = 0;
-  totalNonBillable = 0;
-  for (element of taskElements) {
-    const checkbox = element.children[0].firstChild;
-    if (checkbox.checked) {
-      totalBillable += parseInt(
-        element.children[3].attributes["data-time"].value
-      );
-      totalNonBillable += parseInt(
-        element.children[4].attributes["data-time"].value
-      );
-      taskList.push({
-        name: element.children[1].innerText,
-        assignee: element.children[2].innerText,
-        billable: element.children[3].attributes["data-time"].value,
-        non_billable: element.children[4].attributes["data-time"].value,
-      });
-    }
-  }
-  mail.tasks = taskList;
-  mail.billable = totalBillable;
-  mail.non_billable = totalNonBillable;
-
-  fetch(window.location.origin + "/sendmail?view=true", {
-    method: "POST",
-    credentials: "same-origin",
-    body: JSON.stringify(mail),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((text) => {
-          throw new Error(text);
-        });
-      } else {
-        return res.text();
-      }
-    })
-    .then((text) => {
-      document.getElementById("mail-body").innerHTML = text;
-      mailModal.show();
-    })
-    .catch((e) => {
-      alert("Nie udało sie wygenerować podglądu");
-      console.log(e);
-    });
-    const sendMailButton = document.getElementsByClassName('send-mail')[0];
-    sendMailButton.setAttribute('id', `send-mail-${companyId}`)
-};
-
-let mainCheckbox = document
+const mainCheckbox = document
   .getElementsByClassName("invoice-main-checkbox")
   .item(0);
-let mainTaskCheckboxList =
+const mainTaskCheckboxList =
   document.getElementsByClassName("task-main-checkbox");
-let checkboxList = document.getElementsByClassName("invoice-checkbox");
-let toggleDateRangeButton = document.getElementById("date-range-button");
-let mailViewButtons = document.getElementsByClassName("mail-sender");
-let mailSendButton = document.getElementsByClassName("send-mail")[0]
-for (element of mailViewButtons) {
+const checkboxList = document.getElementsByClassName("invoice-checkbox");
+const mailViewButtons = document.getElementsByClassName("mail-sender");
+const mailSendButton = document.getElementsByClassName("send-mail")[0];
+const calendarButton = document.getElementById("filter-by-date");
+
+
+for (let element of mailViewButtons) {
   element.addEventListener("click", viewMail);
 }
-mailSendButton.addEventListener("click", sendInvoiceMail)
+mailSendButton.addEventListener("click", sendInvoiceMail);
 
 mainCheckbox.addEventListener("change", toggleAllCheckboxes);
 mainCheckbox.addEventListener("change", toggleInvoiceButtonDisplay);
-for (element of checkboxList) {
+for (let element of checkboxList) {
   element.addEventListener("change", toggleInvoiceButtonDisplay);
 }
-for (mainTaskCheckbox of mainTaskCheckboxList) {
+for (let mainTaskCheckbox of mainTaskCheckboxList) {
   mainTaskCheckbox.addEventListener("change", toggleAllCheckboxes);
 }
 
 toggleInvoiceButtonDisplay();
 
-const picker = new Litepicker({
-  element: document.getElementById("litepicker"),
-  singleMode: false,
-  numberOfMonths: 2,
-  numberOfColumns: 2,
-  inlineMode: true,
-  startDate: startDate,
-  endDate: endDate ? endDate : new Date(),
-});
 picker.show();
 
-const filterByDate = () => {
-  start = picker.getStartDate();
-  end = picker.getEndDate();
 
-  window.location.href =
-    window.location.origin +
-    `/?start_date=${start.getTime()}&end_date=${end.getTime()}`;
-};
-
-calendarButton = document.getElementById("filter-by-date");
 calendarButton.addEventListener("click", filterByDate);
-
