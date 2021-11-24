@@ -43,6 +43,7 @@ export const sendInvoiceMail = (e) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-TOKEN": document.cookie.match(/csrf_access_token=([0-9a-zA-Z\-]+)/)[1]
     },
     credentials: "same-origin",
     body: JSON.stringify(mail),
@@ -112,6 +113,9 @@ export const viewMail = (e) => {
     method: "POST",
     credentials: "same-origin",
     body: JSON.stringify(mail),
+    headers: {
+      "X-CSRF-TOKEN": document.cookie.match(/csrf_access_token=([0-9a-zA-Z\-]+)/)[1]
+    }
   })
     .then((res) => {
       if (!res.ok) {

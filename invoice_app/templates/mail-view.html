@@ -47,8 +47,8 @@
       <thead>
         <th>#</th>
         <th>Name</th>
-        <th>Owner</th>
         <th>Billable hours</th>
+
       </thead>
       <tbody>
         {% for task in data.tasks %}
@@ -56,7 +56,6 @@
         <tr>
           <td>{{ loop.index }}</td>
           <td>{{ task.name }}</td>
-          <td>{{ task.assignee }}</td>
           <td>{{ task.billable|strftime }}</td>
         </tr>
         {% endif %}
