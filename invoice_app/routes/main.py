@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, current_user
 from flask_mailing import Message
 from ..utils.clickup_reader import ClickupReader
 from ..extensions import mail
+from ..tasks.tasks import send_mail_report
 import json, pdfkit
 
 
@@ -27,21 +28,12 @@ def index():
 
 @main.route("/sendmail", methods=["POST"])
 @jwt_required()
-async def send_mail():
+def send_mail():
     data = json.loads(request.data)
     mail_template = render_template("mail-view.html", data=data)
-
     if request.args.get('view'):
         return render_template("mail-view.html", data=data, view_only=True)
     
     else:
-        pdf_report = pdfkit.from_string(mail_template, False)
-
-        message = Message(
-            subject="Flask-Mailing module",
-            recipients=["invoiceflask@gmail.com"],
-            body="Wygenerowany raport PDF w załączniku.",
-        )
-        message.attach("raport.pdf", pdf_report)
-        await mail.send_message(message)
+        send_mail_report.delay(mail_template)
         return jsonify({"message": "success"}), 200
