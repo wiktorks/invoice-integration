@@ -1,27 +1,12 @@
-from flask import Flask
-from .routes.main import main
-from .routes.auth import auth
-from .config import DevConfig
-from .extensions import jwt, mail
-from datetime import timedelta, datetime
+from celery import Celery
 
 
-def create_app(config_class=DevConfig):
-    app = Flask(__name__, static_url_path="/public", static_folder="public")
-    app.config.from_object(config_class)
-    jwt.init_app(app)
-    mail.init_app(app)
+def make_celery(app_name=__name__):
+    return Celery(
+        app_name,
+        broker="amqp://admin:mypass@rabbitmq:5672",
+        backend="amqp://admin:mypass@rabbitmq:5672",
+    )
 
-    @app.template_filter("strftime")
-    def seconds_to_hours(timestamp):
-        return str(timedelta(seconds=int(timestamp)))
-    
-    @app.template_filter("date_pretty")
-    def timestamp_to_date(timestamp):
-        date = int(float(timestamp)/1000)
-        return str(datetime.fromtimestamp(date).date())
 
-    app.register_blueprint(main)
-    app.register_blueprint(auth)
-
-    return app
+celery = make_celery()
