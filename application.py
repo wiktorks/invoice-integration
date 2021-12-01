@@ -10,4 +10,4 @@ import os
 if __name__ == '__main__':
     application = create_app(config_class=DevConfig, celery=celery)
     port = int(os.environ.get('PORT', 5000))
-    application.run(host="0.0.0.0", port=port)
+    application.run(host="0.0.0.0", port=port, debug=True)
