@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_jwt_extended import jwt_required, current_user
-from flask_mailing import Message
 from ..utils.clickup_reader import ClickupReader
-from ..extensions import mail
-import json, pdfkit
+from ..tasks.tasks import send_mail_report
+import json
 
 
 main = Blueprint("main", __name__)
@@ -25,23 +24,32 @@ def index():
     )
 
 
+@main.route("/sendmails", methods=["POST"])
+@jwt_required()
+def send_mails():
+    data = json.loads(request.data)
+    if request.args.get("view"):
+        invoice_temlate_array = [
+            render_template("mail-view.html", data=mail, view_only=True)
+            for mail in data["mails"]
+        ]
+        return jsonify({"views": invoice_temlate_array}), 200
+    else:
+        invoice_temlate_array = [
+            render_template("mail-view.html", data=mail) for mail in data["mails"]
+        ]
+        send_mail_report.delay(invoice_temlate_array)
+        return jsonify({"message": "success"}), 200
+
+
 @main.route("/sendmail", methods=["POST"])
 @jwt_required()
-async def send_mail():
+def send_mail():
     data = json.loads(request.data)
     mail_template = render_template("mail-view.html", data=data)
-
-    if request.args.get('view'):
+    if request.args.get("view"):
         return render_template("mail-view.html", data=data, view_only=True)
-    
-    else:
-        pdf_report = pdfkit.from_string(mail_template, False)
 
-        message = Message(
-            subject="Flask-Mailing module",
-            recipients=["invoiceflask@gmail.com"],
-            body="Wygenerowany raport PDF w załączniku.",
-        )
-        message.attach("raport.pdf", pdf_report)
-        await mail.send_message(message)
+    else:
+        send_mail_report.delay(mail_template)
         return jsonify({"message": "success"}), 200

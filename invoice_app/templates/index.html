@@ -43,7 +43,8 @@
         {% if company.tasks %}
         <tr class="company" id="company-{{ loop.index }}">
           <td>
-            <input class="checkbox invoice-checkbox" type="checkbox" value="" id="flexCheckDefault" />
+            <input class="checkbox invoice-checkbox invoice-checkbox-{{ loop.index }}" type="checkbox" value=""
+              id="flexCheckDefault" />
           </td>
           <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
             <div>
@@ -70,16 +71,19 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li class="send-mail-button">
-                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">Prześlij fakturę na maila
-                    PMa</button>
+                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                    Prześlij fakturę na maila PMa
+                  </button>
                 </li>
                 <li class="send-mail-button">
-                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">Prześlij fakturę do
-                    klienta</button>
+                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                    Prześlij fakturę do klienta
+                  </button>
                 </li>
                 <li class="send-mail-button">
-                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">Wystaw fakturę za ten
-                    okres</button>
+                  <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                    Wystaw fakturę za ten okres
+                  </button>
                 </li>
               </ul>
             </div>
@@ -128,8 +132,9 @@
 </div>
 <div class="row justify-content-center position-fixed d-none" id="invoice-button-panel">
   <div class="col-md-8 btn-group">
-    <button class="btn btn-primary">Prześlij faktury na maila PMa</button><button class="btn btn-warning">Prześlij
-      faktury do klienta</button><button class="btn btn-success">Wystaw faktury za ten okres</button>
+    <button class="btn btn-primary multiple-email-sender">Prześlij faktury na maila PMa</button>
+    <button class="btn btn-warning multiple-email-sender">Prześlij faktury do klienta</button>
+    <button class="btn btn-success multiple-email-sender">Wystaw faktury za ten okres</button>
   </div>
 </div>
 <div class="modal" id="mail-display">
@@ -144,6 +149,46 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary send-mail">Send Email</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="multiple-mail-display">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Task report</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="mail-body">
+        <div id="carouselExampleIndicators" class="carousel .carousel-dark slide" data-bs-ride="carousel"
+          data-bs-interval="false">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+              aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+              aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+              aria-label="Slide 3"></button>
+          </div>
+          <div id="mails-carousel" class="carousel-inner">
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary send-multiple-mail">Send Email</button>
       </div>
     </div>
   </div>

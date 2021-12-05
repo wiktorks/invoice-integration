@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile
+    command: python application.py
+    volumes:
+      - ./:/app
+    ports: 
+      - "5000:5000"
+    depends_on:
+      - celery
+      - rabbitmq
+    env_file:
+      - ./.env
+
+  rabbitmq:
+    image: rabbitmq:3.9.7
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "5672:5672"
+    restart: on-failure
+    logging:
+      driver: none
+  
+  celery:
+    hostname: celery
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile
+    command: celery -A celery_worker.celery worker --pool=solo -l info
+    volumes:
+      - ./:/app
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./.env

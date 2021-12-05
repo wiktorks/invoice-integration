@@ -17,6 +17,9 @@ class DevConfig:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_FROM = os.environ.get("MAIL_USERNAME")
 
+    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+
 
 class ProdConfig:
     SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -33,3 +36,6 @@ class ProdConfig:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_FROM = os.environ.get("MAIL_USERNAME")
+
+    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
