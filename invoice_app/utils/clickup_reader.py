@@ -11,18 +11,30 @@ class ClickupReader:
         "Authorization": os.environ.get("CLICKUP_ACCESS_TOKEN"),
         "content-type": "application/json",
     }
-    base_url = "https://api.clickup.com/api/v2/"
+    base_url = "https://api.clickup.com/api/v2"
     team_id = 2443740
-    dev_space_id = 4730256
+    spaces = {
+        "IN PROGRESS - DEV": 4730256,
+        "SERVICE": 4730259,
+        "DONE": 4730258,
+        "IN PROGRESS - DESIGN/CONSULTING": 4730469,
+    }
+    
+    def _get_folder_list(self):
+        folders = []
+        for space in self.spaces.values():
+            request = Request(
+                url=f"{self.base_url}/space/{space}/folder?archived=false",
+                headers=self.header,
+            )
+            response = urlopen(request, timeout=10).read()
+            response = json.loads(response)
+            folders += response["folders"]
+        
+        return folders
 
     def __init__(self):
-        request = Request(
-            url="https://api.clickup.com/api/v2/space/4730256/folder?archived=false",
-            headers=self.header,
-        )
-        response = urlopen(request, timeout=10).read()
-        response = json.loads(response)
-
+        folder_list = self._get_folder_list()
         self.folder_dict = {
             int(item["id"]): {
                 "name": item["name"],
@@ -30,14 +42,16 @@ class ClickupReader:
                 "non_billable": 0,
                 "tasks": [],
             }
-            for item in response["folders"]
+            for item in folder_list
         }
         self.backlog_lists = []
-        for folder in response["folders"]:
+        for folder in folder_list:
             for task_list in folder["lists"]:
                 if re.search("[bB]acklog", task_list["name"]):
+                    print(folder)
                     self.backlog_lists.append(task_list["id"])
-        url = f"https://api.clickup.com/api/v2/team"
+                    
+        url = f"{self.base_url}/team"
         request = Request(
             url=url,
             headers=self.header,
