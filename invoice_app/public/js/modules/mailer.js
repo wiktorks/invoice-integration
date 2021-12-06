@@ -42,7 +42,8 @@ const getCompanyReportData = (companyId) => {
 // TODO Zmieniaj dynamicznie godziny po zmianie checkboxa!
 export const sendInvoiceMail = (e) => {
   const el = e.target;
-  const companyId = el.id.split("-").at(-1);
+  // const companyId = el.id.split("-").at(-1);
+
   const mail = getCompanyReportData(companyId);
   fetch(window.location.origin + "/sendmail", {
     method: "POST",
@@ -77,7 +78,8 @@ export const sendInvoiceMail = (e) => {
 
 export const viewMail = (e) => {
   const el = e.target;
-  const companyId = el.classList.item(2).split("-").at(-1);
+  // const companyId = el.classList.item(2).split("-").at(-1);
+  const [companyId] = el.classList.item(2).split("-").slice(-1);
   const mail = getCompanyReportData(companyId);
   const mailModal = new bootstrap.Modal(
     document.getElementById("mail-display")
@@ -116,7 +118,7 @@ export const viewMail = (e) => {
 
 export const viewMails = (e) => {
   const mails = [...document.querySelectorAll(".invoice-checkbox:checked")]
-    .map((el) => el.classList.item(2).split("-").at(-1))
+    .map((el) => el.classList.item(2).split("-").slice(-1)[0])
     .map((companyId) => getCompanyReportData(companyId));
   const multipleMailModal = new bootstrap.Modal(
     document.getElementById("multiple-mail-display")
@@ -158,9 +160,8 @@ export const viewMails = (e) => {
 
 export const sendMails = (e) => {
   const mails = [...document.querySelectorAll(".invoice-checkbox:checked")]
-    .map((el) => el.classList.item(2).split("-").at(-1))
+    .map((el) => el.classList.item(2).split("-").slice(-1)[0])
     .map((companyId) => getCompanyReportData(companyId));
-
   fetch(window.location.origin + "/sendmails", {
     method: "POST",
     headers: {

@@ -18,6 +18,12 @@ def create_app(config_class=DevConfig, **kwargs):
     @app.template_filter("strftime")
     def seconds_to_hours(timestamp):
         return str(timedelta(seconds=int(timestamp)))
+    
+    @app.template_filter('seconds_to_days')
+    def seconds_to_days(timestamp):
+        dt = timedelta(seconds=int(timestamp))
+        secs_per_day = 24*60*60    # hours * mins * secs
+        return dt.total_seconds()/secs_per_day
 
     @app.template_filter("date_pretty")
     def timestamp_to_date(timestamp):

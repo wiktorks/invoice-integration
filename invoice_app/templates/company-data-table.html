@@ -1,0 +1,104 @@
+<table class="table table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>
+        <input class="checkbox invoice-checkbox invoice-main-checkbox" type="checkbox" value="" />
+      </th>
+      <th></th>
+      <th>Company name</th>
+      <th>Billable hours</th>
+      <th>Non billable hours</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody class="">
+    {% for company in invoice_data.values() %}
+    {% set outer_loop = loop %}
+    {% if company.tasks %}
+    <tr class="company" id="company-{{ loop.index }}">
+      <td>
+        <input class="checkbox invoice-checkbox invoice-checkbox-{{ loop.index }}" type="checkbox" value=""
+          id="flexCheckDefault" />
+      </td>
+      <td class="collapse-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ loop.index }}">
+        <div>
+          <i class="bi bi-caret-down-fill"></i>
+        </div>
+      </td>
+      <td class="collapse-toggle company-name" data-bs-toggle="collapse"
+        data-bs-target="#collapseExample{{ loop.index }}">
+        {{company.name}}
+      </td>
+      <td class="collapse-toggle company-billable" data-time="{{ company.billable }}" data-bs-toggle="collapse"
+        data-bs-target="#collapseExample{{ loop.index }}">
+        {{company.billable|strftime}}
+      </td>
+      <td class="collapse-toggle company-non-billable" data-time="{{ company.non_billable }}" data-bs-toggle="collapse"
+        data-bs-target="#collapseExample{{ loop.index }}">
+        {{company.non_billable|strftime}}
+      </td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown">
+            Invoice action
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li class="send-mail-button">
+              <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                Prześlij fakturę na maila PMa
+              </button>
+            </li>
+            <li class="send-mail-button">
+              <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                Prześlij fakturę do klienta
+              </button>
+            </li>
+            <li class="send-mail-button">
+              <button class="dropdown-item mail-sender mail-sender-{{ loop.index }}">
+                Wystaw fakturę za ten okres
+              </button>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    <tr class="not-hover">
+      <td colspan="2" class="hidden-row not-hover"></td>
+      <td colspan="4" class="hidden-row not-hover">
+        <div class="collapse" id="collapseExample{{ loop.index }}">
+          <table class="table table-hover table-secondary align-middle tasks-{{ loop.index }}">
+            <thead class="">
+              <th><input class="checkbox task-main-checkbox task-main-checkbox-{{ outer_loop.index }}" type="checkbox"
+                  value="" id="flexCheckDefault" checked /></th>
+              <th>Task name</th>
+              <th>Owner</th>
+              <th>Billable hours</th>
+              <th>Non billable hours</th>
+            </thead>
+            <tbody>
+              {% for task in company.tasks %}
+              <tr class="task">
+                <td><input class="checkbox task-checkbox-{{ outer_loop.index }}" type="checkbox" value=""
+                    id="flexCheckDefault" checked />
+                </td>
+                <td class="task-name">{{task.task.name}}</td>
+                <td class="task-user">{{task.user.name}}</td>
+                {% if task.billable %}
+                <td class="task-billable" data-time="{{ task.duration }}">{{task.duration|strftime}}</td>
+                <td class="task-non-billable" data-time="{{ 0 }}">0</td>
+                {% else %}
+                <td class="task-billable" data-time="{{ 0 }}">0</td>
+                <td class="task-non-billable" data-time="{{ task.duration }}">{{task.duration|strftime}}</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
