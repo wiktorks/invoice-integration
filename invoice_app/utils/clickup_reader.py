@@ -48,7 +48,6 @@ class ClickupReader:
         for folder in folder_list:
             for task_list in folder["lists"]:
                 if re.search("[bB]acklog", task_list["name"]):
-                    print(folder)
                     self.backlog_lists.append(task_list["id"])
                     
         url = f"{self.base_url}/team"
@@ -130,12 +129,12 @@ class ClickupReader:
             group_tasks = list(group)
             folder_id = 0
             for task in group_tasks:
-                folder_id = task["folder"]
+                folder_id = int(task["folder"])
                 if task["billable"]:
                     # ms
                     self.folder_dict[folder_id]["billable"] += task["duration"]
                 else:
                     # ms
                     self.folder_dict[folder_id]["non_billable"] += task["duration"]
-            self.folder_dict[group_tasks[0]["folder"]]["tasks"] += group_tasks
+            self.folder_dict[folder_id]["tasks"] += group_tasks
         return self.folder_dict
