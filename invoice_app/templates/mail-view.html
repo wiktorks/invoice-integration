@@ -24,31 +24,19 @@
     {% if view_only %}
     {% set bootstrap_col = 'col-sm-' %}
     {% endif %}
-    <img class="logo {{ bootstrap_col }}3" src="https://blueowl.pl/static/882db3adbda02abc0d3ddf37581c5b11/logo.png"
+    <img class="logo {{ bootstrap_col }}6" src="https://blueowl.pl/static/882db3adbda02abc0d3ddf37581c5b11/logo.png"
       alt="" srcset="">
-    <div class="{{ bootstrap_col }}8">
-      <div class="row justify-content-end">
-        <ul class="{{ bootstrap_col }}4 project-data">
-          <li>Project name</li>
-          <li>Project manager name</li>
-        </ul>
-        <ul class="{{ bootstrap_col }}4 project-data">
-          <li>Company name</li>
-          <li>Company NIP</li>
-          <li>Company addres 1</li>
-          <li>Company address 2</li>
-        </ul>
-      </div>
+    <div class="{{ bootstrap_col }}6">
+      <h1>{{ data.name }}</h1>
     </div>
   </header>
   <main>
-    <h1>Raport from {{ data.date_start|date_pretty }} to {{ data.date_end|date_pretty }}</h1>
-    <table class="table table-stripped">
+    <h2>Raport from {{ data.date_start|date_pretty }} to {{ data.date_end|date_pretty }}</h2>
+    <table class="table table-stripped table-bordered">
       <thead>
         <th>#</th>
         <th>Name</th>
         <th>Billable hours</th>
-
       </thead>
       <tbody>
         {% for task in data.tasks %}
@@ -61,18 +49,13 @@
         {% endif %}
         {% endfor %}
       </tbody>
-      <tfoot>
+      <tfoot style="border: none">
         <tr>
-          <th scope="row">Total</th>
-          <td>{{ data.billable|strftime }}</td>
+          <td colspan="2"></td>
+          <td><b>Total:</b> {{ data.billable|seconds_to_days }} days</td>
         </tr>
       </tfoot>
     </table>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam, quasi dignissimos vitae dolore a odit
-      recusandae soluta, temporibus ducimus quos iusto placeat incidunt, enim pariatur cumque ipsa repellat veritatis
-      vero?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque numquam iure officia id nisi? Alias deserunt sunt
-      quisquam ab minima autem, asperiores cum nulla beatae atque error velit itaque. Ab.</p>
   </main>
 </body>
 
