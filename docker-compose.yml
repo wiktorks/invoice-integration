@@ -4,7 +4,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: ./docker/dockerfile
+      dockerfile: ./docker/dockerfile-server
     command: python application.py
     volumes:
       - ./:/app
@@ -31,8 +31,8 @@ services:
     hostname: celery
     build:
       context: .
-      dockerfile: ./docker/dockerfile
-    command: celery -A celery_worker.celery worker --pool=solo -l info
+      dockerfile: ./docker/dockerfile-celery
+    command: bash -c "sleep 30 && celery -A celery_worker.celery worker --pool=solo -l info"
     volumes:
       - ./:/app
     depends_on:
